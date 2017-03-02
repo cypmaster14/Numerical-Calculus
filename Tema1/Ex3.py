@@ -89,21 +89,21 @@ def P(index, x):
     else:
         return -1000000
 
+
 def solve_part1():
     errors = [[0, i] for i in range(0, 7)]
 
     start = time.time()
-    random_values = np.random.uniform(-np.pi / 2, np.pi / 2, 10000)
-
-    for rv in random_values:
+    # random_values = np.random.uniform(-np.pi / 2, np.pi / 2, 10000)
+    for i in range(0, 10000):
+        rv = uniform(-pi / 2, pi / 2)
         for index in range(1, 7):
             error = abs(P(index, rv) - sin(rv))
             errors[index][0] += error
 
     delta = time.time() - start
     errors = sorted(errors, key=lambda tup: tup[0])
-    return (errors[1:7],delta)
-
+    return (errors[1:7], delta)
 
 
 # Part 2
@@ -133,27 +133,30 @@ def sixthPolynom(x, y):
 
 def P_p2(index, x):
     if index == 1:
-        return firstPolynom(x,x**2)
+        return firstPolynom(x, x ** 2)
     elif index == 2:
-        return secondPolynom(x,x**2)
+        return secondPolynom(x, x ** 2)
     elif index == 3:
-        return thirdPolynom(x,x**2)
+        return thirdPolynom(x, x ** 2)
     elif index == 4:
-        return forthPolynom(x,x**2)
+        return forthPolynom(x, x ** 2)
     elif index == 5:
-        return fifthPolynom(x,x**2)
+        return fifthPolynom(x, x ** 2)
     elif index == 6:
-        return sixthPolynom(x,x**2)
+        return sixthPolynom(x, x ** 2)
     else:
         return -1000000
 
+
 def solve_part2():
-    random_values_100k = np.random.uniform(-np.pi / 2, np.pi / 2, 100000)
+    # random_values_100k = np.random.uniform(-np.pi / 2, np.pi / 2, 100000)
 
     errors_and_time_100k_p1 = [[0, 0, i] for i in range(0, 7)]
     errors_and_time_100k_p2 = [[0, 0, i] for i in range(0, 7)]
 
-    for rv in random_values_100k:
+    for i in range(0, 100000):
+        rv = uniform(-pi / 2, pi / 2)
+
         for index in range(1, 7):
             t0_p1 = time.time()
             val_p1 = P(index, rv)
@@ -174,7 +177,8 @@ def solve_part2():
     errors_and_time_100k_p1 = sorted(errors_and_time_100k_p1, key=lambda tup: tup[0])
     errors_and_time_100k_p2 = sorted(errors_and_time_100k_p2, key=lambda tup: tup[0])
 
-    return (errors_and_time_100k_p1[1:7],errors_and_time_100k_p2[1:7])
+    return (errors_and_time_100k_p1[1:7], errors_and_time_100k_p2[1:7])
+
 
 def part1_msg(errors):
     msg = ''
@@ -192,10 +196,12 @@ def part2_msg(errors_and_time_p1, errors_and_time_p2):
         error_p2 = errors_and_time_p2[i][0]
         time_p2 = errors_and_time_p2[i][1]
 
-        msg += 'P' + str(polynomIndex) + ' initial: ' + 'erorr= ' + str(error_p1) + ' | ' + 'time= ' + str(time_p1) + '\n'
+        msg += 'P' + str(polynomIndex) + ' initial: ' + 'erorr= ' + str(error_p1) + ' | ' + 'time= ' + str(
+            time_p1) + '\n'
         msg += 'P' + str(polynomIndex) + ' nou:  ' + 'erorr= ' + str(error_p2) + ' | ' + 'time= ' + str(time_p2)
         msg += '\n\n'
     return msg
+
 
 if __name__ == "__main__":
     root = Tk()
@@ -223,10 +229,8 @@ if __name__ == "__main__":
     errors_and_time_p1 = part2[0]
     errors_and_time_p2 = part2[1]
     text_part2 = "      Erorile si timpii pentru cele 6 polinoame (initial si imbunatatit) in 100.000 numere sunt \n\n"
-    text_part2 += part2_msg(errors_and_time_p1,errors_and_time_p2) + "\n"
+    text_part2 += part2_msg(errors_and_time_p1, errors_and_time_p2) + "\n"
     partea2_label = Label(app, text=text_part2)
     partea2_label.grid()
 
     root.mainloop()
-
-
