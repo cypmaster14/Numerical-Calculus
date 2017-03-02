@@ -200,7 +200,7 @@ def part2_msg(errors_and_time_p1, errors_and_time_p2):
 if __name__ == "__main__":
     root = Tk()
 
-    root.title("Exercitiul 1")
+    root.title("Exercitiul 3")
     root.geometry("500x550")
 
     app = Frame(root)
