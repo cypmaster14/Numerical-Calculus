@@ -207,7 +207,7 @@ if __name__ == "__main__":
     root = Tk()
 
     root.title("Exercitiul 3")
-    root.geometry("500x550")
+    root.geometry("700x700")
 
     app = Frame(root)
     app.grid()
