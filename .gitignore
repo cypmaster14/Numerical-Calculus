@@ -90,3 +90,9 @@ ENV/
 
 
 .idea
+*.pdf
+*.zip
+*.rar
+Tema1/exerci*
+Tema1/server.py
+Tema1/static
