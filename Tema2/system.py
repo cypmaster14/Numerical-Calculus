@@ -14,14 +14,14 @@ class System(object):
 
     def read_input(self, fileName):
         data = json.load(open(fileName, mode="rt"))
-        self.Ainit = numpy.matrix(data['A'])
         self.A = numpy.matrix(data['A'])
         self.d = numpy.zeros(3)
         self.b = numpy.array(data['b'])
         self.n = data['n']
+        self.e = data['e']
 
-    def inputIsOk(self):
-        return matrixValidation.matrixIsGood(self.A, self.n)
+    def inputIsValid(self):
+        return matrixValidation.matrixIsGood(self.A)
 
     def printMatrixL(self):
         for i in range(0, self.n):
@@ -47,8 +47,13 @@ class System(object):
 
         return text
 
+    def revertToAinit(self):
+        for i in range(1, self.n):
+            for j in range(i + 1, self.n):
+                self.A[j, i] = self.A[i, j]
+
     def doHomework(self):
-        if not self.inputIsOk():
+        if not self.inputIsValid():
             print('Input is not correct')
             exit()
 
@@ -58,26 +63,28 @@ class System(object):
         app = Frame(root)
         app.pack()
 
-        choleskyFunctions.choleskyDecomposition(self.A, self.d, self.n)
+        choleskyFunctions.choleskyDecomposition(self.A, self.d, self.e)
         matrixL = self.printMatrixL()
         Label(app, text=matrixL).pack()
         Label(app, text="d={d}".format(d=self.d)).pack()
         Label(app, text=choleskyFunctions.choeleskyDeterminant(self.d))
         print("d=", self.d)
         print("Determinant of A=", choleskyFunctions.choeleskyDeterminant(self.d))
-        xChol = systemSolver.solveSystem(self.A, self.d, self.n, self.b)
+        xChol = systemSolver.solveSystem(self.A, self.d, self.b)
         Label(app, text="xChol:{x}".format(x=xChol)).pack()
         print("xChol:", xChol)
 
+        self.revertToAinit()
         L, U = choleskyFunctions.choleskyLUDecomposition(self.A)
         print("L={l}".format(l=L))
         print("U={u}".format(u=U))
-        print("X=", systemSolver.solveSystemClasically(self.Ainit, self.b))
+        print("X=", systemSolver.solveSystemClasically(self.A, self.b))
+        print("L*U=", numpy.dot(L, U))
         Label(app, text="L=\n{l}".format(l=L)).pack()
         Label(app, text="U=\n{u}".format(u=U)).pack()
-        Label(app, text="X={value}".format(value=systemSolver.solveSystemClasically(self.Ainit, self.b))).pack()
+        Label(app, text="X={value}".format(value=systemSolver.solveSystemClasically(self.A, self.b))).pack()
 
-        norm = norms.getSecondNorm(self.A, xChol, self.b, self.n)
+        norm = norms.getSecondNorm(self.A, xChol, self.b)
         print('Eucledian norm:{norm}'.format(norm=norm))
         Label(app, text='Eucledian norm:{norm}'.format(norm=norm)).pack()
 

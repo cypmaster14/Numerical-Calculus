@@ -1,8 +1,9 @@
 import numpy
 
 
-def solveSystem(A, d, n, b):
+def solveSystem(A, d, b):
     # Solve the first system L*z=b
+    n = A[0].size
     z = numpy.zeros(n)
     for i in range(0, n):
         z[i] = b[i]

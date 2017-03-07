@@ -1,21 +1,21 @@
 import numpy
 
 
-def choleskyDecomposition(A, d, n):
+def choleskyDecomposition(A, d, e):
+    n = A[0].size
     for p in range(0, n):
 
         # d[p] computation
-        d[p] = A[p, p]
-        for k in range(0, p):
-            d[p] -= d[k] * (A[p, k] ** 2)
+        d[p] = A[p, p] - sum(d[k] * (A[p, k] ** 2) for k in range(0, p))
 
         # l[i][p] computation
-
         for i in range(p + 1, n):
-            value = 0
-            for k in range(0, p):
-                value += d[k] * A[i, k] * A[p, k]
-            A[i, p] = (A[i, p] - value) / d[p]
+            value = sum(d[k] * A[i, k] * A[p, k] for k in range(0, p))
+            if abs(d[p]) > e:
+                A[i, p] = (A[i, p] - value) / d[p]
+            else:
+                print('Impartirea nu poate avea loc')
+                exit()
 
 
 # A=LDT(d)

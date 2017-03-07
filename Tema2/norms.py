@@ -2,9 +2,9 @@ import numpy
 from math import sqrt
 
 
-def getSecondNorm(A, x, b, n):
+def getSecondNorm(A, x, b):
     # Compute y=A(init) *x
-
+    n = A[0].size
     y = numpy.zeros(n)
     for i in range(0, n):
         for j in range(0, n):
@@ -16,9 +16,6 @@ def getSecondNorm(A, x, b, n):
     # Compute z=y-b
     z = numpy.subtract(y, b)
 
-    # Compute the eucledian norm
-    eucledianNorm = 0
-    for i in range(0, n):
-        eucledianNorm += z[i] ** 2
-
+    # Compute the euclidean norm
+    eucledianNorm = sum(z[i] ** 2 for i in range(0, n))
     return sqrt(eucledianNorm)
