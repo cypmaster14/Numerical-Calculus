@@ -1,5 +1,9 @@
 import system
+from tkinter import *
 
 if __name__ == "__main__":
-    system = system.System('input.json')
-    system.doHomework()
+    root = Tk()
+    root.geometry("700x700+300+300")
+    system = system.System('input.json', root)
+    root.mainloop()
+    # system.doSomething()
