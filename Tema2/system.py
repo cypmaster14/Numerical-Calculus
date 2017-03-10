@@ -14,9 +14,9 @@ class System(object):
 
     def read_input(self, fileName):
         data = json.load(open(fileName, mode="rt"))
-        self.A = numpy.matrix(data['A'])
-        self.d = numpy.zeros(3)
-        self.b = numpy.array(data['b'])
+        self.A = numpy.matrix(data['A'], dtype=numpy.float_)
+        self.d = numpy.zeros(3, dtype=numpy.float_)
+        self.b = numpy.array(data['b'], dtype=numpy.float_)
         self.n = data['n']
         self.e = data['e']
 
