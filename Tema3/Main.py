@@ -154,8 +154,6 @@ def initUI(parent):
     button1 = Button(frame4, text="Calculate", command=main, width=10)
     button1.pack(side=LEFT, padx=50, pady=30)
 
-    # lb2['text'] = "CEva bun"
-
 
 if __name__ == "__main__":
     root.geometry("700x700+300+300")
