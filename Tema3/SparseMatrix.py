@@ -110,7 +110,7 @@ class SparseMatrix:
                     else:
                         AxB_line[B_line_element[1]] = A_line_element[0] * B_line_element[0]
 
-            for col, value in AxB_line.iteritems():
+            for col, value in AxB_line.items():
                 if col == line:
                     multiply_d.append(value)
                 else:

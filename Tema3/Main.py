@@ -73,7 +73,7 @@ def check_a_x_b(A, B):
     b = a_x_b_data[1]
     axb_d, axb_val_col = transform(n, a_x_b_data[2], "AxB")
     AxB_file = SparseMatrix(n, axb_d, axb_val_col, "AxB_file")
-    AxB = A.multiply_matrix_efficient(B)
+    AxB = A.multiply_matrix_super_efficient(B)
     AxB_timesX = AxB.multiply_vector()
     matrix_equal = str(matrixes_are_equal(AxB, AxB_file))
     vectors_equal = str(vectors_are_equal(AxB_timesX, b))
