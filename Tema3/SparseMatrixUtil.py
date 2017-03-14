@@ -1,5 +1,5 @@
-def transform(n,elements,matrix_name):
-    nn_count = [0] * 100
+def transform(n, elements, matrix_name):
+    nn_count = [0] * 100  # not null count , un vector de frecventa ce contorizeaza numarul de nn de le fiecare linie
     d = [0] * n
     hash_map = dict()
     for element in elements:
@@ -18,48 +18,50 @@ def transform(n,elements,matrix_name):
                         found = True
                         break
                 if not found:
-                    line_elements.append([v,j])
+                    line_elements.append([v, j])
             else:
                 new_line = list()
-                new_line.append([v,j])
+                new_line.append([v, j])
                 hash_map[i] = new_line
     val_col = []
-    for line in range(0,n+1):
-        val_col.append((0,-line))
+    for line in range(0, n + 1):
+        val_col.append((0, -line))
         line_elements = hash_map.get(line)
         if line_elements != None:
-            nn_count[len(line_elements)+1] += 1
+            nn_count[len(line_elements)] += 1  # dc pui len(..) +1 ?
             for (val, col) in line_elements:
                 val_col.append((val, col))
         else:
             nn_count[1] += 1
-    nn_count[1] -= 1
+    nn_count[1] -= 1  # scazi pentru ca ai incrementat la (0,2017)
     last_nn_element_index = 5
     while nn_count[last_nn_element_index] != 0:
         last_nn_element_index += 1
-    print matrix_name + " not null elements distribution by number of lines: " + str(nn_count[0:last_nn_element_index])
+    print(matrix_name + " not null elements distribution by number of lines: " + str(nn_count[0:last_nn_element_index]))
     return (d, val_col)
 
-def matrixes_are_equal(A,B):
+
+def matrixes_are_equal(A, B):
     if A.n != B.n:
         return False
     if len(A.val_col) != len(B.val_col) or len(A.d) != len(B.d):
         return False
-    for i in range(0,A.n):
+    for i in range(0, A.n):
         if A.d[i] != B.d[i]:
             return False
-    A_sorted = sorted(A.val_col, key=lambda tup: (tup[0],tup[1]))
-    B_sorted = sorted(B.val_col, key=lambda tup: (tup[0],tup[1]))
+    A_sorted = sorted(A.val_col, key=lambda tup: (tup[0], tup[1]))
+    B_sorted = sorted(B.val_col, key=lambda tup: (tup[0], tup[1]))
     epsilon = 0
-    for i in range(0,len(A_sorted)):
+    for i in range(0, len(A_sorted)):
         if abs(A_sorted[i][0] - B_sorted[i][0]) > epsilon or A_sorted[i][1] != B_sorted[i][1]:
             return False
     return True
 
-def vectors_are_equal(v,b):
+
+def vectors_are_equal(v, b):
     if len(v) != len(b):
         return False
-    for i in range(0,len(v)):
+    for i in range(0, len(v)):
         if v[i] != b[i]:
             return False
     return True
