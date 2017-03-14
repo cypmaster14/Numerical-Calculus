@@ -1,3 +1,6 @@
+from time import time
+
+
 class SparseMatrix:
     def __init__(self, n, d, val_col, name):
         self.n = n
@@ -77,6 +80,67 @@ class SparseMatrix:
             line_index = line_end
         print(self.name + " * x (first 10) = " + str(vector_sol[0:10]))
         return vector_sol
+
+    # Multiply each line from A only with valid columns from B (columns of elements on line = A_line_element.column)
+    # Compute the sum for each element in AxB by storing and updating the value in a dictionary with key = column -> O(1) access
+    # Time coplexity: O(2017 lines x 10 elements per line in A x 10 elements per line in B x 1 for access/update AxB line) -> O(2*10^5)
+    def multiply_matrix_super_efficient(self, B):
+        t0 = time()
+        multiply_val_col = []
+        multiply_d = []
+        vc_length = len(self.val_col)
+        line_index = 0
+        B_lines = self.compute_lines_dictionary(B.d, B.val_col)
+        while line_index < vc_length - 1:
+            line = -self.val_col[line_index][1]
+            multiply_val_col.append((0, -line))
+            A_line = [(self.d[line], line)]
+            k = line_index + 1
+            while k < vc_length and self.val_col[k][0] != 0:
+                A_line.append(self.val_col[k])
+                k += 1
+
+            AxB_line = dict()  # key = col
+            for A_line_element in A_line:
+                B_line = B_lines[A_line_element[1]]
+                for B_line_element in B_line:
+                    AxB_line_element = AxB_line.get(B_line_element[1])
+                    if AxB_line_element is not None:
+                        AxB_line[B_line_element[1]] = AxB_line_element + A_line_element[0] * B_line_element[0]
+                    else:
+                        AxB_line[B_line_element[1]] = A_line_element[0] * B_line_element[0]
+
+            for col, value in AxB_line.iteritems():
+                if col == line:
+                    multiply_d.append(value)
+                else:
+                    multiply_val_col.append((value, col))
+
+            line_index = k
+
+        multiply_val_col.append((0, -self.n))
+        tf = time()
+        print("AxB time = " + str((tf - t0) * 1000).split(".")[0] + "ms")
+        print("AxB diagonals (first 10) = " + str(multiply_d[0:10]))
+        print("AxB val_col (first 10) = " + str(multiply_val_col[0:10]))
+        AxB = SparseMatrix(self.n, multiply_d, multiply_val_col, "AxB")
+        return AxB
+
+    def compute_lines_dictionary(self, d, val_col):
+        lines = dict()
+        i = 0
+        val_col_length = len(val_col)
+        while i < val_col_length - 1:
+            current_line = -val_col[i][1]
+            line_list = [(d[current_line], current_line)]
+            i += 1
+            while val_col[i][0] != 0:
+                line_list.append(val_col[i])
+                i += 1
+            lines[current_line] = line_list
+        return lines
+
+    ################  Other methods for multiplication  ################
 
     # O(2017 lines x 10 elements per line x 100 valid columns x 10 elements per line) = O(2017 * 10^4) = O(2*10^7)
     def multiply_matrix_efficient(self, B):
