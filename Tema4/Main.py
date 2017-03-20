@@ -1,6 +1,7 @@
 from Tema3.Main import read_values
 from Tema3.SparseMatrixUtil import transform
 from Tema3.SparseMatrix import SparseMatrix
+from Tema4.BiCGSTAB import solve_system_bicgstab
 import numpy
 from tkinter import *
 
@@ -16,6 +17,8 @@ lb8 = Label(root)
 lb9 = Label(root)
 lb11 = Label(root)
 lb12 = Label(root)
+lb14 = Label(root)
+lb15 = Label(root)
 
 
 def read_matrix(filename):
@@ -80,7 +83,7 @@ def compute_X_c(A, b, x_c, x_p):
 
 def initUI(parent):
     parent.title("Tema4")
-    global lb2, lb3, lb5, lb6, lb8, lb9, lb11, lb12
+    global lb2, lb3, lb5, lb6, lb8, lb9, lb11, lb12, lb14, lb15
 
     frame1 = Frame(parent)
     frame1.pack(fill=X)
@@ -142,10 +145,30 @@ def initUI(parent):
     lb12 = Label(frame8, text="Solutii", width=500)
     lb12.pack(side=LEFT, padx=5, pady=5)
 
+    frame12 = Frame(parent)
+    frame12.pack(fill=X)
+    lb16 = Label(frame12, text="BICGSTAB", width=500)
+    lb16.pack(side=LEFT, padx=5, pady=20)
+
+    frame10 = Frame(parent)
+    frame10.pack(fill=X)
+
+    lb13 = Label(frame10, text="Fisier 1", width="9")
+    lb13.pack(side=LEFT, padx=5, pady=5)
+
+    lb14 = Label(frame10, text="Iteratii:", width=9)
+    lb14.pack(side=LEFT, padx=5, pady=5)
+
+    frame11 = Frame(parent)
+    frame11.pack(fill=X)
+
+    lb15 = Label(frame11, text="Solutii", width=500)
+    lb15.pack(side=LEFT, padx=5, pady=5)
+
     frame9 = Frame(parent)
     frame9.pack(fill=X)
 
-    button1 = Button(frame9, text="Calculate GS", command=main, width=10)
+    button1 = Button(frame9, text="Calculate GS and BICGSTAB", command=main, width=26)
     button1.pack(side=LEFT, padx=50, pady=30)
 
 
@@ -177,7 +200,18 @@ def main():
         elif i == 4:
             aux = list(map(lambda x: "%.5f" % x, x_c[:5]))
             lb11['text'] = "Iteratii:" + str(k)
-            lb12['text'] = aux
+            if norm >= epsilon:
+                lb12['text'] = "Divergenta"
+            else:
+                lb12['text'] = aux
+    A, b = read_matrix("m_rar_2017_1.txt")
+    result = solve_system_bicgstab(A, b)
+    if len(result) == 1:
+        lb15['text'] = result[0]
+    else:
+        aux = list(map(lambda x: "%.5f" % x, result[0][:5]))
+        lb14['text'] = "Iteratii:" + str(result[1])
+        lb15['text'] = aux
 
 
 if __name__ == "__main__":

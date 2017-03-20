@@ -1,7 +1,7 @@
-from SparseMatrix import SparseMatrix
-from SparseMatrixUtil import transform
-from SparseMatrixUtil import matrixes_are_equal
-from SparseMatrixUtil import vectors_are_equal
+from Tema3.SparseMatrix import SparseMatrix
+from Tema3.SparseMatrixUtil import transform
+from Tema3.SparseMatrixUtil import matrixes_are_equal
+from Tema3.SparseMatrixUtil import vectors_are_equal
 from tkinter import *
 
 root = Tk()

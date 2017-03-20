@@ -1,4 +1,4 @@
-import system
+import Tema2.system as system
 from tkinter import *
 
 if __name__ == "__main__":

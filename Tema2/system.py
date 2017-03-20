@@ -1,9 +1,9 @@
 import json
 import numpy
-import matrixValidation
-import choleskyFunctions
-import systemSolver
-import norms
+import Tema2.matrixValidation as matrixValidation
+import Tema2.choleskyFunctions as choleskyFunctions
+import Tema2.systemSolver as systemSolver
+import Tema2.norms as norms
 from tkinter import *
 import tkinter.messagebox
 
