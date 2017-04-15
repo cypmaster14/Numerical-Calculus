@@ -28,16 +28,8 @@ def transform(n, elements, matrix_name):
         val_col.append((0, -line))
         line_elements = hash_map.get(line)
         if line_elements != None:
-            nn_count[len(line_elements)] += 1  # dc pui len(..) +1 ?
             for (val, col) in line_elements:
                 val_col.append((val, col))
-        else:
-            nn_count[1] += 1
-    nn_count[1] -= 1  # scazi pentru ca ai incrementat la (0,2017)
-    last_nn_element_index = 5
-    while nn_count[last_nn_element_index] != 0:
-        last_nn_element_index += 1
-    print(matrix_name + " not null elements distribution by number of lines: " + str(nn_count[0:last_nn_element_index]))
     return (d, val_col)
 
 

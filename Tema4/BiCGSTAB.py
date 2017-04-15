@@ -2,36 +2,39 @@ epsilon = 1e-16
 
 
 def solve_system_bicgstab(A, b):
-    """Initial guess in zero-vector"""
     x = [0.0] * A.n
-
-    "Initial residual is vector b"
-
     r0 = [b[i] for i in range(A.n)]
     r = list(r0)
     rho = alpha = omega = 1.0
     v = p = [0.0] * A.n
-    k = 0
-    for k in range(0, 10 ** 8):
-        rho_next = sum(r0[i] * r[i] for i in range(0, A.n))
-        beta = (rho_next / rho) * (alpha / omega)
-        rho = rho_next
+    iterations = 0
+    found = False
+    for iterations in range(0, 10 ** 5):
+        rho_i = sum(r0[i] * r[i] for i in range(0, A.n))
+        beta = (rho_i / rho) * (alpha / omega)
+        rho = rho_i
 
-        p = [p[i] - omega * v[i] for i in range(0, A.n)]
-        p = [p[i] * beta for i in range(0, A.n)]
-        p = [p[i] + r[i] for i in range(0, A.n)]
+        for i in range(0, A.n):
+            p[i] = p[i] - omega * v[i]
+
+        for i in range(0, A.n):
+            p[i] = p[i] * beta
+
+        for i in range(0, A.n):
+            p[i] = p[i] + r[i]
 
         v = multiply_vector(A, p)
-        alpha = rho_next / sum(r0[i] * v[i] for i in range(0, A.n))
-        h = []
+        alpha = rho_i / sum(r0[i] * v[i] for i in range(0, A.n))
+        h = list()
         for i in range(0, A.n):
             h.append(x[i] + alpha * p[i])
 
         found = True
         for i in range(0, A.n):
             aux = abs(h[i] - x[i])
-            if aux >= epsilon and found:
+            if aux >= epsilon:
                 found = False
+                break
 
         if found:
             x = h
@@ -39,32 +42,32 @@ def solve_system_bicgstab(A, b):
 
         s = [r[i] - alpha * v[i] for i in range(0, A.n)]
         t = multiply_vector(A, s)
-        omega = sum(t[i] * s[i] for i in range(A.n)) / sum(t[i] ** 2 for i in range(0, A.n))
+        omega = sum(t[i] * s[i] for i in range(A.n)) / sum(t[i] * t[i] for i in range(0, A.n))
 
-        x_next = [h[i] + omega * s[i] for i in range(0, A.n)]
+        x_i = [h[i] + omega * s[i] for i in range(0, A.n)]
         found = True
         for i in range(0, A.n):
-            aux = abs(x_next[i] - x[i])
-            if aux >= epsilon and found:
+            aux = abs(x_i[i] - x[i])
+            if aux >= epsilon:
                 found = False
+                break
 
         if found:
-            x = x_next
+            x = x_i
             break
 
-        x = x_next
+        x = x_i
         r = [s[i] - omega * t[i] for i in range(0, A.n)]
-        print(k)
+        print(iterations)
 
     if found == False:
-        print("Divergenta")
         return "Divergenta"
     else:
         aux = multiply_vector(A, x)
         error = max([aux[i] - b[i] for i in range(0, A.n)])
-        print("X:{x}".format(x=x))
-        print("Error:{error}".format(error=error))
-        return x[:5], k
+        print("X:", x)
+        print("Error:", error)
+        return x[:5], iterations
 
 
 def multiply_vector(A, x):
